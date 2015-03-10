@@ -1,0 +1,45 @@
+
+<div data-ng-controller="annotatedTextController">
+    <div class="panel">
+        <div class="panel-heading row">
+            <div class="col-xs-6">
+
+                <div ng-repeat="res in resources track by $index" >
+                    <div ng-if="res.id != null" && ng-if="!item.corrected">
+
+
+                        <strong> Texte à compléter  : </strong>
+                        <span id='{{res.id}}' ng-bind="holethetext(res.content.text, res.id, fillannotation(res.content.annotations))"></span>
+
+                        </br> </br> </br>
+                    </div>
+                </div>
+
+
+               <button ng-click="saveAnswer()" class="btn btn-success"
+                        title="Afficher les reponses.">
+                    Afficher les answers
+                </button>
+            </div>
+            <div class="col-xs-6 solution" ng-if="item.corrected">
+                <strong>Solution</strong>
+                <div ng-repeat="res in resources track by $index" >
+                    <div ng-if="res.id != null" && ng-if="item.corrected">
+
+
+                        <strong> Solution des textes!  : </strong>
+                        <span id='_{{res.id}}' ng-bind="displayCorrection(res.content.text, res.id, fillannotation(res.content.annotations))"></span>
+
+                        </br> </br> </br>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <ng-include src="navBarUrl"></ng-include>
+</div>

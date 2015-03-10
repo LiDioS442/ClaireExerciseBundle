@@ -45,13 +45,6 @@ class ResourceResource extends SharedResource
     const MULTIPLE_CHOICE_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource';
 
     /**
-     * @const MULTIPLE_CHOICE_FORMULA_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource'
-     */
-    const MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource';
-
-
-
-    /**
      * @const PICTURE = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource'
      */
     const PICTURE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource';
@@ -66,11 +59,12 @@ class ResourceResource extends SharedResource
      */
     const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
 
-
     /**
      * @const TEXT = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource'
      */
     const TEXT_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource';
+
+    const ANNOTATED_TEXT_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\AnnotatedTextResource';
 
     /**
      * @var int $id Id of resource
@@ -199,6 +193,10 @@ class ResourceResource extends SharedResource
      */
     protected $keywords;
 
+
+
+
+
     /**
      * @var int
      * @Serializer\Type("integer")
@@ -287,6 +285,9 @@ class ResourceResource extends SharedResource
             case CommonResource::MULTIPLE_CHOICE_QUESTION:
                 $class = self::MULTIPLE_CHOICE_QUESTION_CLASS;
                 break;
+            case CommonResource::ANNOTATED_TEXT:
+                $class = self::ANNOTATED_TEXT_CLASS;
+                break;
             case CommonResource::PICTURE:
                 $class = self::PICTURE_CLASS;
                 break;
@@ -298,9 +299,6 @@ class ResourceResource extends SharedResource
                 break;
             case CommonResource::OPEN_ENDED_QUESTION:
                 $class = self::OPEN_ENDED_QUESTION_CLASS;
-                break;
-            case CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION:
-                $class = self::MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS;
                 break;
             default:
                 throw new \LogicException('Unknown type');

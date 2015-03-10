@@ -23,6 +23,9 @@
                         <div ng-switch-when="group-items">
                             <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 500%"></span>
                         </div>
+                        <div ng-switch-when="annotated-text">
+                            <span title="Exercice d'annotation de texte" class="glyphicon glyphicon-font" style="font-size: 500%"></span>
+                        </div>
                     </div>
                     <div class="col-xs-6 col-centered">
                         <div class="col-xs-6">
@@ -109,16 +112,16 @@
                         <div class="row">
                             <div class="col-xs-2" ng-switch="resources[documentId.id].type">
                                 <div ng-switch-when="text">
-                                    <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
+                                <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
+                            </div>
+                                <div ng-switch-when="annotated-text">
+                                    <span title="Texte annoté" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                 </div>
                                 <div ng-switch-when="picture">
                                     <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                 </div>
                                 <div ng-switch-when="multiple-choice-question">
                                     <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
-                                </div>
-                                <div ng-switch-when="multiple-choice-formula-question">
-                                    <span title="QCM avec formules" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                 </div>
                                 <div ng-switch-when="open-ended-question">
                                                 <span class="glyphicon glyphicon-question-sign" title="Question à réponse courte ouverte"
@@ -166,6 +169,9 @@
                     </div>
                     <div class="col-centered" ng-switch="resources[documentId.id].type">
                         <div ng-switch-when="text">
+                        <label>Contenu&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.text }}
+                    </div>
+                        <div ng-switch-when="annotated-text">
                             <label>Contenu&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.text }}
                         </div>
                         <div ng-switch-when="picture">
@@ -178,18 +184,12 @@
                         <div ng-switch-when="multiple-choice-question">
                             <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
-                    <div ng-switch-when="multiple-choice-formula-question">
-                        <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
-                    </div>
                         <div ng-switch-when="open-ended-question">
                             <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
                     </div>
                     <div class="col-centered" ng-switch="resources[documentId.id].type">
                         <div ng-switch-when="multiple-choice-question">
-                            <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
-                        </div>
-                        <div ng-switch-when="multiple-choice-formula-question">
                             <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
                         </div>
                         <div ng-switch-when="open-ended-question">
@@ -231,11 +231,6 @@
              src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice.html'"
              data-ng-controller="modelEditMultipleChoiceController"></div>
     </div>
-    <div ng-switch-when="multiple-choice-formula">
-        <div ng-include
-             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice-formula.html'"
-             data-ng-controller="modelEditMultipleChoiceFormulaController"></div>
-    </div>
     <div ng-switch-when="group-items">
         <div ng-include
              src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-group-items.html'"
@@ -246,6 +241,81 @@
              src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-open-ended-question.html'"
              data-ng-controller="modelEditOpenEndedQuestionController"></div>
     </div>
+    <div ng-switch-when="annotated-text">
+
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Type Exercice
+                <div class="row">
+                <div class="col-xs-4">
+                    <div title="Texte a trou" data-ng-click="modelUpdateCheckbox(1,model)"  >
+                        <div class="col-centered">
+
+                            <span class="glyphicon" ng-class="{'glyphicon-check': model.content.texteatrou, 'glyphicon-unchecked': !model.content.texteatrou }"></span>
+                        </div>
+                        <div class="col-centered">
+                            <h4>Texte a trou</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-4">
+                    <div title="Parasite"  data-ng-click="modelUpdateCheckbox(2,model)"  >
+                        <div class="col-centered">
+
+                            <span class="glyphicon" ng-class="{'glyphicon-check': model.content.parasite, 'glyphicon-unchecked': !model.content.parasite }"></span>
+                        </div>
+                        <div class="col-centered">
+                            <h4>Parasite</h4>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                    <div title="Reecriture de texte" data-ng-click="modelUpdateCheckbox(3,model)"  >
+                        <div class="col-centered">
+
+                            <span class="glyphicon" ng-class="{'glyphicon-check': model.content.reecriture, 'glyphicon-unchecked': !model.content.reecriture }"></span>
+                        </div>
+                        <div class="col-centered">
+                            <h4>Réécriture</h4>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-4">
+                    <div title="Analyser un texte" data-ng-click="modelUpdateCheckbox(4,model)">
+                        <div class="col-centered">
+
+                            <span class="glyphicon" ng-class="{'glyphicon-check': model.content.analyse, 'glyphicon-unchecked': !model.content.analyse}"></span>
+                        </div>
+                        <div class="col-centered">
+                            <h4>Analyse</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-annotated-text.html'"
+             data-ng-controller="modelEditAnnotatedTextController"></div>
+
+    </div>
+
+
 </div>
 
 <div class="panel panel-primary">
@@ -320,14 +390,6 @@
             title="Essayer le modèle">
         Essayer
     </button>
-
-    <!--ng-click="exportExerciceFromModel(model)" class="btn btn-primary"-->
-    <!--<button
-            ng-disabled="!model.complete"
-            ng-click="exportExerciceFromModel(model)" class="btn btn-primary"
-            title="Exporter un ensemble d'exercices generes">
-        Exporter
-    </button>-->
     <button ng-if="BASE_CONFIG.currentUserId == model.owner && model.removable"
             ng-click="deleteModel(model)" back-Button
             class="btn btn-danger pull-right"

@@ -90,6 +90,12 @@ abstract class SharedResource
      */
     protected $keywords;
 
+
+
+
+
+
+
     /**
      * @var int
      */
@@ -392,6 +398,11 @@ abstract class SharedResource
     {
         return $this->keywords;
     }
+
+
+
+
+
 
     /**
      * Set removable

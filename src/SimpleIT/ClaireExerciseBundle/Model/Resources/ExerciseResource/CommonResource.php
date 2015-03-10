@@ -28,9 +28,9 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Validable;
  * @Serializer\Discriminator(field = "object_type", map = {
  *    "picture": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource",
  *    "text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource",
+ *    "annotated-text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\AnnotatedTextResource",
  *    "sequence": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource",
  *    "multiple_choice_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource",
- *    "multiple_choice_formula_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource",
  *    "open_ended_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource"
  * })
  */
@@ -52,14 +52,15 @@ abstract class CommonResource implements Validable
     const MULTIPLE_CHOICE_QUESTION = "multiple-choice-question";
 
     /**
-     * @const MULTIPLE_CHOICE_FORMULA_QUESTION = "multiple-choice-formula-question"
-     */
-    const MULTIPLE_CHOICE_FORMULA_QUESTION = "multiple-choice-formula-question";
-
-    /**
      * @const OPEN_ENDED_QUESTION = "open-ended-question"
      */
     const OPEN_ENDED_QUESTION = "open-ended-question";
+
+
+    /**
+     * @const ANNOTATED_TEXT = "annotated-text"
+     */
+    const ANNOTATED_TEXT= "annotated-text";
 
     /**
      * @const SEQUENCE = "sequence"
@@ -104,11 +105,12 @@ abstract class CommonResource implements Validable
     {
         if (
             $type === self::TEXT
+            || $type === self::ANNOTATED_TEXT
             || $type === self::SEQUENCE
             || $type === self::PICTURE
             || $type === self::MULTIPLE_CHOICE_QUESTION
-            || $type === self::MULTIPLE_CHOICE_FORMULA_QUESTION
             || $type === self::OPEN_ENDED_QUESTION
+
         ) {
             return true;
         }

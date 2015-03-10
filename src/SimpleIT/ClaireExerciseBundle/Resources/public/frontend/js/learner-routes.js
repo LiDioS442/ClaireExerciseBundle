@@ -41,14 +41,13 @@ mainApp.config(
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-multiple-choice.html'
             });
 
-            $stateProvider.state('attempt.multiple-choice-formula', {
-                url: '/multiple-choice-formula/:itemId',
-                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-multiple-choice-formula.html'
-            });
-
             $stateProvider.state('attempt.open-ended-question', {
                 url: '/open-ended-question/:itemId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-open-ended-question.html'
+            });
+            $stateProvider.state('attempt.annotated-text', {
+                url: '/annotated-text/:itemId',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-annotated-text.html'
             });
         }
     ]

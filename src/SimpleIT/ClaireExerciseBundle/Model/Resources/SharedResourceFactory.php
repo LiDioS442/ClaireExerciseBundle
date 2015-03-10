@@ -70,6 +70,8 @@ abstract class SharedResourceFactory
         // metadata and keywords
         $metadataArray = array();
         $keywordArray = array();
+
+
         /** @var Metadata $md */
         foreach ($entity->getMetadata() as $md) {
             if ($md->getKey() === MetadataResource::MISC_METADATA_KEY) {
@@ -130,7 +132,7 @@ abstract class SharedResourceFactory
                 $resource = KnowledgeResourceFactory::create($entity);
                 break;
             default:
-                throw new InvalidTypeException('    Unknown type:' . $type);
+                throw new InvalidTypeException('Unknown type:' . $type);
         }
 
         return $resource;

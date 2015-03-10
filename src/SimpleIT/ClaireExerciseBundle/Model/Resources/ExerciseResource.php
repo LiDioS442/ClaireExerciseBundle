@@ -38,6 +38,12 @@ class ExerciseResource
      */
     const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise';
 
+
+    /**
+     * @const ANNOTATED_TEXT_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\AnnotatedText\Exercise'
+     */
+    const ANNOTATED_TEXT_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\AnnotatedText\Exercise';
+
     /**
      * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise'
      */
@@ -57,12 +63,6 @@ class ExerciseResource
      * @const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise'
      */
     const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise';
-
-    /**
-     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise'
-     */
-    const MULTIPLE_CHOICE_FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoiceFormula\Exercise';
-
 
     /**
      * @var int $id Id of exercise
@@ -248,12 +248,12 @@ class ExerciseResource
             case CommonExercise::PAIR_ITEMS:
                 $class = self::PAIR_ITEMS_CLASS;
                 break;
+            case CommonExercise::ANNOTATED_TEXT:
+                $class = self::ANNOTATED_TEXT_CLASS;
+                break;
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $class = self::OPEN_ENDED_QUESTION_CLASS;
                 break;
-            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
-            $class = self::MULTIPLE_CHOICE_FORMULA_CLASS;
-            break;
             default:
                 throw new \LogicException('Unknown type');
         }

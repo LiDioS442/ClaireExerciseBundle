@@ -31,8 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *    "pair-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model",
  *    "order-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model",
  *    "multiple-choice": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model",
- *    "multiple-choice-formula": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\Model",
- *    "open-ended-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model"
+ *    "open-ended-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model",
+ *    "annotated-text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\AnnotatedText\Model"
+ *
  * })
  */
 abstract class CommonModel
@@ -41,11 +42,6 @@ abstract class CommonModel
      * @const MULTIPLE_CHOICE = "multiple-choice"
      */
     const MULTIPLE_CHOICE = "multiple-choice";
-
-    /**
-     * @const MULTIPLE_CHOICE_FORMULA = "multiple-choice-formula"
-     */
-    const MULTIPLE_CHOICE_FORMULA = "multiple-choice-formula";
 
     /**
      * @const GROUP_ITEMS = "group-items"
@@ -58,6 +54,11 @@ abstract class CommonModel
     const ORDER_ITEMS = "order-items";
 
     /**
+     * @const ANNOTATED_TEXT = "annotated-text"
+     */
+    const ANNOTATED_TEXT = "annotated-text";
+
+    /**
      * @const PAIR_ITEMS = "pair-items"
      */
     const PAIR_ITEMS = "pair-items";
@@ -66,7 +67,6 @@ abstract class CommonModel
      * @const OPEN_ENDED_QUESTION = "open-ended-question"
      */
     const OPEN_ENDED_QUESTION = "open-ended-question";
-
 
     /**
      * @var string The wording

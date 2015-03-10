@@ -158,6 +158,12 @@ class KnowledgeResource extends SharedResource
      */
     protected $keywords;
 
+
+
+
+
+
+
     /**
      * @var int
      * @Serializer\Type("integer")

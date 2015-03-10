@@ -125,6 +125,4 @@ interface FormulaServiceInterface
      * @return array
      */
     public function prefixVariableNames($variables, $formulaName);
-
-
 }

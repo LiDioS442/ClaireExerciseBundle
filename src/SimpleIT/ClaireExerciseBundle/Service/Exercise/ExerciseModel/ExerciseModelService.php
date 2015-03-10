@@ -51,6 +51,10 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
+
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\AnnotatedText\Model as AnnotatedText;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\AnnotatedText\TextBlock;
+
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
@@ -64,11 +68,6 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseMode
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-
-/* TODO BRYAN : L'endroit est important*/
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\Model as MultipleChoiceFormula;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\QuestionBlock as MCFQuestionBlock;
-
 
 /**
  * Service which manages the exercise generation
@@ -178,6 +177,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             case CommonExercise::GROUP_ITEMS:
                 $class = ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS;
                 break;
+            case CommonExercise::ANNOTATED_TEXT:
+                $class = ExerciseModelResource::ANNOTATED_TEXT_MODEL_CLASS;
+                break;
             case CommonExercise::ORDER_ITEMS:
                 $class = ExerciseModelResource::ORDER_ITEMS_MODEL_CLASS;
                 break;
@@ -186,11 +188,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 break;
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $class = ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS;
-            break;
-            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
-                $class = ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS;
                 break;
-
             default:
                 throw new \LogicException('Unknown type of model');
         }
@@ -403,10 +401,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     /** @var MultipleChoice $content */
                     $complete = $this->checkMCComplete($content, $errorCode);
                     break;
-                case CommonModel::MULTIPLE_CHOICE_FORMULA:
-                    /** @var MultipleChoiceFormula $content */
-                    $complete = $this->checkMCFComplete($content, $errorCode);
-                    break;
                 case CommonModel::PAIR_ITEMS:
                     /** @var PairItems $content */
                     $complete = $this->checkPIComplete($content, $errorCode);
@@ -418,6 +412,10 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 case CommonModel::ORDER_ITEMS:
                     /** @var OrderItems $content */
                     $complete = $this->checkOIComplete($content, $errorCode);
+                    break;
+                case CommonModel::ANNOTATED_TEXT:
+                    /** @var OrderItems $content */
+                    $complete = $this->checkATComplete($content, $errorCode);
                     break;
                 case CommonModel::OPEN_ENDED_QUESTION:
                     /** @var OpenEnded $content */
@@ -494,53 +492,41 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         return true;
     }
 
-    /** TODO BRYAN :: Il faut checker les conditions : Au moins 2 propositions, dont une vraie ? utiliser une formule ?
-     * Non, ça c'est pas défaut... Il nous faut "de base" 4 champs préremplis, ainsi que 2 champs 'formules'
-     * Check if a multiple choice  formula content is complete
+
+
+
+
+
+
+
+
+    /**
+     * Check if a Annotated Text content is complete
      *
-     * @param MultipleChoiceFormula $content
+     * @param AnnotatedText $content
      * @param string $errorCode
      *
      * @return boolean
      */
-    private function checkMCFComplete(
-        MultipleChoiceFormula $content,
+    private function checkATcomplete(
+        AnnotatedText $content,
         &$errorCode
     )
     {
-        if (is_null($content->isShuffleQuestionsOrder())) {
-            $errorCode = '201';
-
-            return false;
-        }
-        $questionBlocks = $content->getQuestionBlocks();
-        if (!count($questionBlocks) > 0) {
-            $errorCode = '202';
-
-            return false;
-        }
-        /** @var MCFQuestionBlock $questionBlock */
-        foreach ($questionBlocks as $questionBlock) {
-            if (!($questionBlock->getMaxNumberOfPropositions() >= 0
-                && $questionBlock->getMaxNumberOfRightPropositions() >= 0)
-            ) {
-                $errorCode = '301';
-
-                return false;
-            }
-
-            if (!$this->checkBlockComplete(
-                $questionBlock,
-                array(CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION),
-                $errorCode
-            )
-            ) {
-                return false;
-            }
-        }
-
-        return true;
+       return true;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -1129,8 +1115,21 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         )
                 );
                 break;
+
+            case ExerciseModelResource::ANNOTATED_TEXT_MODEL_CLASS:
+                /** @var AnnotatedText $content */
+                $reqRes = array_merge(
+                    $reqRes,
+                    $this->computeRequiredResourcesFromModelBlocks
+                    (
+                        $content->getTextBlocks(),
+                        $import,
+                        $ownerId,
+                        $originalOwner
+                    )
+                );
+                break;
             case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
-            case ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS:
             case ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS:
                 /** @var MultipleChoice|OpenEnded $content */
                 $reqRes = array_merge(
@@ -1432,7 +1431,22 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                             $owner
                         )
                 );
+
                 break;
+
+
+            case ExerciseModelResource::ANNOTATED_TEXT_MODEL_CLASS:
+                /** @var AnnotatedText $content */
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlocks
+                    (
+                        $content->getTextBlocks(),
+                        $owner
+                    )
+                );
+                break;
+
             case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
                 /** @var GroupItems $content */
                 $usedRes = array_merge(
@@ -1445,7 +1459,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 );
                 break;
             case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
-            case ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS:
             case ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS:
                 /** @var MultipleChoice|OpenEnded $content */
                 $usedRes = array_merge(

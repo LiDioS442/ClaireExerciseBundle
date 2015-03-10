@@ -62,11 +62,11 @@
                         <button class="btn" ng-model="$parent.$parent.filters.type.multiple_choice" btn-checkbox-true="'multiple-choice'" btn-checkbox-false="''" btn-checkbox>
                             <span title="QCM" class="glyphicon glyphicon-check"></span>
                         </button>
-                        <button class="btn" ng-model="$parent.$parent.filters.type.multiple_choice" btn-checkbox-true="'multiple-choice-formula'" btn-checkbox-false="''" btn-checkbox>
-                        <span title="QCM" class="glyphicon glyphicon-check"></span>
-                         </button>
                         <button class="btn" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
                             <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                        <button class="btn" ng-model="$parent.$parent.filters.type.annotated_text" btn-checkbox-true="'annotated-text'" btn-checkbox-false="''" btn-checkbox>
+                            <span title="Texte annoté" class="glyphicon glyphicon-font"></span>
                         </button>
                     </div>
                 </div>
@@ -141,9 +141,9 @@
         <div class="list-group">
             <div><a href data-ng-click="createModel('pair-items')" class="list-group-item"><span title="Exercice d'appariement" class="glyphicon glyphicon-random"></span>&nbsp;Créer un modèle d'exercices d'appariement</a></div>
             <div><a href data-ng-click="createModel('order-items')" class="list-group-item"><span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort"></span>&nbsp;Créer un exercice d'ordonancement</a></div>
+            <div><a href data-ng-click="createModel('annotated-text')" class="list-group-item"><span title="Exercice d'annotation de texte" class="glyphicon glyphicon-font"></span>&nbsp;Créer un exercice sur les textes</a></div>
             <div><a href data-ng-click="createModel('group-items')" class="list-group-item"><span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
             <div><a href data-ng-click="createModel('multiple-choice')" class="list-group-item"><span title="QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
-            <div><a href data-ng-click="createModel('multiple-choice-formula')" class="list-group-item"><span title="QCM avec formules" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple avec formules</a></div>
             <div><a href data-ng-click="createModel('open-ended-question')" class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer un questionaire à réponse courte</a></div>
         </div>
     </accordion-group>
@@ -169,9 +169,6 @@
                     <div ng-switch-when="multiple-choice">
                         <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
                     </div>
-                    <div ng-switch-when="multiple-choice-formula">
-                        <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
-                    </div>
                     <div ng-switch-when="open-ended-question">
                         <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
                     </div>
@@ -180,6 +177,9 @@
                     </div>
                     <div ng-switch-when="order-items">
                         <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort" style="font-size: 320%"></span>
+                    </div>
+                    <div ng-switch-when="annotated-text">
+                        <span title="Exercice sur les textes" class="glyphicon glyphicon-font" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="group-items">
                         <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 320%"></span>
@@ -288,11 +288,11 @@
             <div ng-switch-when="multiple-choice">
                 <label>Type de modèle&nbsp;:&nbsp;</label>QCM
             </div>
-            <div ng-switch-when="multiple-choice-formula">
-                <label>Type de modèle&nbsp;:&nbsp;</label>QCM avec formules
-            </div>
             <div ng-switch-when="open-ended-question">
                 <label>Type de modèle&nbsp;:&nbsp;</label>Question à réponse courte ouverte
+            </div>
+            <div ng-switch-when="annotated-text">
+                <label>Type de modèle&nbsp;:&nbsp;</label>Texte annoté
             </div>
             <div ng-switch-when="pair-items">
                 <label>Type de modèle&nbsp;:&nbsp;</label>Appariement

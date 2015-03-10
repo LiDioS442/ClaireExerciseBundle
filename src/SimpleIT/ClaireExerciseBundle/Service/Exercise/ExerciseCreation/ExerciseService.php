@@ -48,11 +48,6 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
     /**
      * @var ExerciseCreationServiceInterface
      */
-    private $multipleChoiceFormulaService;
-
-    /**
-     * @var ExerciseCreationServiceInterface
-     */
     private $pairItemsService;
 
     /**
@@ -66,9 +61,15 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
     private $orderItemsService;
 
     /**
+ * @var ExerciseCreationServiceInterface
+ */
+    private $openEndedQuestionService;
+
+
+    /**
      * @var ExerciseCreationServiceInterface
      */
-    private $openEndedQuestionService;
+    private $annotatedTextService;
 
     /**
      * Set ExerciseModelService
@@ -131,16 +132,14 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
     }
 
     /**
-     * Set MultipleChoiceFormulaService
+     * Set AnnotatedTextService
      *
-     * @param MultipleChoiceFormulaService $mcService
+     * @param AnnotatedTextService $annotatedTextService
      */
-    public function setMultipleChoiceFormulaService(MultipleChoiceFormulaService $mcService)
+    public function setAnnotatedTextService($annotatedTextService)
     {
-        $this->multipleChoiceFormulaService = $mcService;
+        $this->annotatedTextService = $annotatedTextService;
     }
-
-
 
     /**
      * Correct an item from an exercise
@@ -232,15 +231,15 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
             case CommonExercise::GROUP_ITEMS:
                 $service = $this->groupItemsService;
                 break;
+            case CommonExercise::ANNOTATED_TEXT:
+                $service = $this->annotatedTextService;
+                break;
             case CommonExercise::ORDER_ITEMS:
                 $service = $this->orderItemsService;
                 break;
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $service = $this->openEndedQuestionService;
                 break;
-            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
-            $service = $this->multipleChoiceFormulaService;
-            break;
             case null:
                 throw new \LogicException('The type of exercise should be specified');
             default :

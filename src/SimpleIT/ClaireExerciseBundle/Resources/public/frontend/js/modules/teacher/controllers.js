@@ -4,6 +4,7 @@
 
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
 
+
 resourceControllers.controller('resourceController', ['$scope', '$modal',
     function ($scope, $modal) {
 
@@ -18,10 +19,11 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
             archived: false, // select archived resources or not (boolean)
             public: false, // select public resources or not (boolean)
             type: { // resources types to be selected
-                multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: '', multiple_choice_formula:'multiple-choice-formula-question'
+                multiple_choice_question: 'multiple-choice-question',annotated_text: 'annotated-text' , text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: ''
             },
             keywords: [], // list of keywords that a resource must have to be selected
             metadata: [] // list of metadata objects that a resource must have to be selected
+
         };
 
         $scope.$parent.$watch("subSection", function (newValue) {
@@ -31,37 +33,47 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 $scope.filters.type.picture = 'picture';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
+                $scope.filters.type.annotated_text = '';
             } else if (newValue == 'multiple-choice') {
                 $scope.filters.type.multiple_choice_question = 'multiple-choice-question';
                 $scope.filters.type.text = '';
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
+                $scope.filters.type.annotated_text = '';
             } else if (newValue == 'group-items') {
                 $scope.filters.type.multiple_choice_question = '';
                 $scope.filters.type.text = 'text';
                 $scope.filters.type.picture = 'picture';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
+                $scope.filters.type.annotated_text = '';
             } else if (newValue == 'sequence') {
                 $scope.filters.type.multiple_choice_question = '';
                 $scope.filters.type.text = '';
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
+                $scope.filters.type.annotated_text = '';
+
             } else if (newValue == 'open-ended-question') {
                 $scope.filters.type.multiple_choice_question = '';
                 $scope.filters.type.text = '';
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = 'open-ended-question';
                 $scope.filters.type.sequence = '';
-            } else if(newValue == 'multiple-choice-formula') {
+                $scope.filters.type.annotated_text = '';
+
+            }
+            else if (newValue == 'annotated-text')
+            {
                 $scope.filters.type.multiple_choice_question = '';
-                $scope.filters.type.text = '';
+                $scope.filters.type.text = 'text';
+                $scope.filters.type.annotated_text = 'annotated-text';
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
-                $scope.filters.type.multiple_choice_formula_question = 'multiple-choice-formula-question';
+
             }
         });
 
@@ -98,13 +110,42 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "complete": null,
                     "metadata": [],
                     "keywords": [],
+
                     "content": {
                         "text": null,
+
                         "object_type": "text"
                     },
                     "required_exercise_resources": null,
                     "required_knowledges": null
                 },
+                "annotated_text": {
+                    "type": "annotated-text",
+                    "title": "Nouveau texte annoté",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+
+                    "content": {
+                        "text": null,
+                        "annotations": [
+                            {
+                                "part":null,
+                                "type": null
+                            }
+                        ],
+
+                        "object_type": "annotated-text",
+                        "textWA": 'varchar'
+                    },
+                    "required_exercise_resources": null,
+                    "required_knowledges": null
+                },
+
                 "picture": {
                     "type": "picture",
                     "title": "Nouvelle image",
@@ -114,6 +155,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "complete": null,
                     "metadata": [],
                     "keywords": [],
+
                     "content": {
                         "source": null,
                         "object_type": "picture"
@@ -123,7 +165,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "multiple_choice_question": {
                     "type": "multiple-choice-question",
-                    "title": "Nouvelle question Ancienne",
+                    "title": "Nouvelle question",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -150,13 +192,14 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "open_ended_question": {
                     "type": "open-ended-question",
-                    "title": "Nouvelle question OPEN ENDED",
+                    "title": "Nouvelle question",
                     "public": false,
                     "archived": false,
                     "draft": false,
                     "complete": null,
                     "metadata": [],
                     "keywords": [],
+
                     "content": {
                         "formulas": [],
                         "question": null,
@@ -166,35 +209,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     },
                     "required_exercise_resources": null,
                     "required_knowledges": null
-                },
-                "multiple_choice_formula_question": {
-                    "type": "multiple-choice-formula-question",
-                    "title": "Nouvelle question QCM avec formules",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "formulas": [],
-                        "do_not_shuffle": true,
-                        "question": null,
-                        "propositions": [
-                            {
-                                "text": null,
-                                "right": true
-                            }
-                        ],
-                        "comment": null,
-                        "max_number_of_propositions": 0,
-                        "max_number_of_right_propositions": 0,
-                        "object_type": "multiple_choice_formula_question"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
                 }
-
             }
         };
 
@@ -213,6 +228,36 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 }
             });
         };
+
+        $scope.resourceContext.newResources.annotated_text.content.textWA = 'samerelapute';
+
+        $scope.holethetext = function(resource)
+        {
+
+
+            var textWAtemp = resource.content.text;
+            console.log("texte sans modification " + textWAtemp);
+
+            var trou;
+            var i;
+
+            for(i=0;i<resource.content.annotations.length;i++) {
+                trou = resource.content.annotations[i].part;
+
+
+
+                textWAtemp = textWAtemp.replace(trou, "");
+
+
+
+            }
+            console.log("texte modifier : " +$scope.resourceContext.newResources.annotated_text.content.textWA);
+            $scope.resourceContext.newResources.annotated_text.content.textWA = textWAtemp;
+
+
+        }
+
+
     }]);
 
 resourceControllers.controller('resourceViewController', ['$scope', 'BASE_CONFIG', '$modalInstance', 'resource', 'users',
@@ -279,9 +324,13 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
 
         $scope.resourceAddKeywordsField = function (collection) {
             var keyword = $('#resourceAddKeyword');
+            console.log(keyword[0].value+"tamere");
             collection.push(keyword[0].value);
             keyword[0].value = '';
         };
+
+
+
 
         $scope.resourceAddMetadataField = function (collection) {
             var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
@@ -290,6 +339,31 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             key[0].value = '';
             val[0].value = '';
         };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         $scope.resourceRemoveField = function (collection, index) {
             collection.splice(index, 1);
@@ -333,8 +407,9 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                         $state.go('resourceEdit', {resourceid: data.id});
                     }
                 });
-            } else if (type == 'multiple-choice-formula-question') {
-                Resource.save($scope.resourceContext.newResources.multiple_choice_formula_question, function (data) {
+            }
+            else if (type == 'annotated-text') {
+                Resource.save($scope.resourceContext.newResources.annotated_text, function (data) {
                     $scope.resources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
@@ -343,6 +418,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                     }
                 });
             }
+
         };
     }]);
 
@@ -465,7 +541,6 @@ resourceControllers.filter('myFilters', function () {
 resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
     function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
         $scope.resourcePanelContext = "resourceEdit";
-
         // retrieve resource
         if (typeof $scope.resources === "undefined") {
             $scope.editedResource = Resource.get({id: $stateParams.resourceid});
@@ -480,11 +555,14 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
         // update resource method
         $scope.updateResource = function () {
 
+
+
             var keyword = $("#resourceAddKeyword");
             if (keyword[0].value != '') {
                 $scope.editedResource.keywords.push(keyword[0].value);
                 keyword[0].value = '';
             }
+
 
             if ($scope.resourceAddMD.key != '' && $scope.resourceAddMD.value != '') {
                 $scope.editedResource.metadata.push($scope.resourceAddMD);
@@ -502,10 +580,17 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             delete newResource.required_knowledges;
             delete newResource.complete_error;
 
+
+
             newResource.$update({id: $stateParams.resourceid}, function (resource) {
                 $scope.resources[resource.id] = resource;
                 $scope.editedResource = resource;
             });
+
+
+
+
+
         };
 
         $scope.onFileSelect = function ($files) {
@@ -540,6 +625,43 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             collection.splice(collection.length, 0, newProposition);
         };
 
+
+        $scope.addAnnotation = function (collection) {
+            var newPart = $('#resourceAddPart');
+            var newType = $('#resourceAddType');
+            var newProposition = {part : newPart[0].value,type: newType[0].value};
+            collection.splice(collection.length, 0, newProposition);
+
+            newPart[0].value = '';
+            newType[0].value = '';
+
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $scope.addSolution = function (collection) {
             var newSolution = $('#resourceAddSolution');
             collection.push(newSolution[0].value);
@@ -548,9 +670,13 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
 
         $scope.resourceAddKeywordsField = function (collection) {
             var keyword = $("#resourceAddKeyword");
+            console.log(keyword[0].value);
+
             collection.push(keyword[0].value);
             keyword[0].value = '';
         };
+
+
 
         $scope.resourceAddMetadataField = function (collection) {
             collection.push($scope.resourceAddMD);
@@ -594,51 +720,6 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             );
         };
 
-        /* MULTIPLE CHOICE FORMULA : Ajoute la variable à toute les formules */
-        /* Y a mieux j'imagine... Mais bon, ne faisons point la fine bouche */
-        /* TODO BRYAN : Complete ça !
-
-         /* TODO BRYAN : Cela me parait trop compliqué... Mieux vaut faire une fonction de save différente... */
-         /* Lorsque l'une des variables est créée, on la crée dans la formule, et pour chaque autre formule on fait un watch ! */
-        $scope.formulaMVFAddVariable = function (collection) {
-            collection.splice(collection.length,
-                0,
-                jQuery.extend(true, {}, $scope.resourceContext.formula.newVariable)
-            );
-            /* Pour chaque formule existente, on ajoute l'élément et on synchronise avec les autres */
-            angular.forEach(collection.parent.parent, function( value, key)
-            {
-                formulaMVFAddVariable( value.variables );
-                $scope.$watch( collection.variables[collection.variables.length-1],
-                    function(v){ value.variables[value.variables.length-1] = v; });
-            } );
-        };
-
-        //$scope.$watch( '$editedResources', function(){} );
-        /* TODO BRYAN : Fonction de sauvegarde pour les MCFQ particulièrement */
-        $scope.saveMultiple_choice_formula_question = function (element) {
-            if(element.formulas.length>0)
-            {
-                for(j=1; j<element.formulas.length; j++)
-                {
-                    element.formulas[j].variables.length = 0;
-                    for(i=0; i<element.formulas[0].variables.length; i++)
-                        {
-                            //alert("COBRA !");
-                            $scope.formulaAddVariable(element.formulas[j].variables);
-                            element.formulas[j].variables[i] = element.formulas[0].variables[i];
-                        }
-                }
-            }
-            else
-            {
-                //alert("PAS COBRA : " + element.formulas.length );
-            }
-            $scope.updateResource();
-        };
-
-        /* MULTIPLE CHOICE FORMULA */
-
         $scope.resourceAddFormula = function (collection) {
             collection.splice(collection.length,
                 0,
@@ -664,8 +745,8 @@ resourceControllers.controller('resourceSelectListController', ['$scope', 'BASE_
 
 var modelControllers = angular.module('modelControllers', ['ui.router']);
 
-modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
-    function ($scope, Exercise, Item, ExerciseByModel ,AttemptByExercise, $routeParams, $location) {
+modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
+    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location) {
 
         $scope.section = 'model';
 
@@ -678,11 +759,11 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
             archived: false, // select archived resources or not (boolean)
             public: false, // select public resources or not (boolean)
             type: { // resources types to be selected
-                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: 'order-items', open_ended_question: 'open-ended-question', group_items: 'group-items'
-                , multiple_choice_formula: 'multiple-choice-formula'
+                multiple_choice: 'multiple-choice',annotated_text:'annotated-text', pair_items: 'pair-items', order_items: 'order-items', open_ended_question: 'open-ended-question', group_items: 'group-items'
             },
             keywords: [], // list of keywords that a resource must have to be selected
             metadata: [] // list of metadata objects that a resource must have to be selected
+
         };
 
         $scope.modelContext = {
@@ -710,18 +791,64 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
                                 "is_list": true,
                                 "number_of_occurrences": 0,
                                 "resources": [],
-                                "pair_meta_key": ""
+                                "max_number_of_annotations": 0
                             }
                         ],
                         "exercise_model_type": "pair-items"
                     }
                 },
+
                 "sub_pair_items": {
                     "block_field": {
                         "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
                         "meta_key": "",
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
+                    }
+                },
+                "annotated_text": {
+                    "type": "annotated-text",
+                    "title": "Nouveau texte annoté",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+
+                    "content": {
+                        "wording": null,
+                        "documents": [],
+                        "texteatrou": true,
+                        "parasite": true,
+                        "reecriture": true,
+                        "analyse": true ,
+                        "text_blocks": [
+                            {
+                                "is_list": true,
+                                "number_of_occurrences": 0,
+                                "type_of_suppresion":"",
+                                "number_of_suppresion":0,
+                                "resources": [],
+                                "max_number_of_annotations": 0
+                            }
+                        ],
+                        "exercise_model_type": "annotated-text"
+                    }
+                },
+                "sub_annotated_text": {
+                    "block_field": {
+                        "is_list": true,
+                        "number_of_occurrences": 0,
+                        "max_number_of_annotations": 0,
+                        "type_of_suppresion":"",
+                        "number_of_suppresion":0,
+                        "resources": [],
+
                         "resource_constraint": {
                             "metadata_constraints": [],
                             "excluded": []
@@ -888,86 +1015,8 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
                             "excluded": []
                         }
                     }
-                },
-                "test_exercise": {
-                    "type": "open-ended-question",
-                    "title": "Nouveau modèle d'exercice de question de mon NTE exercise Test Exercise",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "wording": null,
-                        "documents": [],
-                        "question_blocks": [
-                            {
-                                "number_of_occurrences": 0,
-                                "resources": [],
-                                "is_list": true
-                            }
-                        ],
-                        "shuffle_questions_order": true,
-                        "exercise_model_type": "open-ended-question"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "sub_test_exercise": {
-                    "block_field": {
-                        "number_of_occurrences": 0,
-                        "resources": [],
-                        "is_list": true,
-                        "resource_constraint": {
-                            "metadata_constraints": [],
-                            "excluded": []
-                        }
-                    }
-                },
-                "multiple_choice_formula": {
-                    "type": "multiple-choice-formula",
-                    "title": "Nouveau QCM avec formules",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "wording": null,
-                        "documents": [],
-                        "question_blocks": [
-                            {
-                                "number_of_occurrences": 0,
-                                "resources": [],
-                                "is_list": true,
-                                "max_number_of_propositions": 0,
-                                "max_number_of_right_propositions": 0
-                            }
-                        ],
-                        "shuffle_questions_order": true,
-                        "exercise_model_type": "multiple-choice-formula"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "sub_multiple_choice_formula": {
-                    "block_field": {
-                        "number_of_occurrences": 0,
-                        "resources": [],
-                        "is_list": true,
-                        "max_number_of_propositions": 0,
-                        "max_number_of_right_propositions": 0,
-                        "resource_constraint": {
-                            "metadata_constraints": [],
-                            "excluded": []
-                        }
-                    }
                 }
-
-                }
-
+            }
         };
 
         $scope.modelAddKeywordsField = function (collection) {
@@ -975,6 +1024,9 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
             collection.push(keyword[0].value);
             keyword[0].value = '';
         };
+
+
+
 
         $scope.modelAddMetadataField = function (collection) {
             var key = $("#modelAddMetadataKey"), val = $("#modelAddMetadataValue");
@@ -995,6 +1047,15 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
                 collection.splice(collection.length, 0, {"id": id});
             }
         };
+
+
+
+
+
+
+
+
+
 
         $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
             var newElement;
@@ -1039,89 +1100,6 @@ modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'Ex
                     $scope.tryExercise(exercise);
                 });
         };
-
-
-        /* TODO BRYAN = EXPORT EN COUR ; FUNCTION ICI*/
-        /* export_model function_list */
-        //var MCFQ_number_export = 3;
-        var MCFQ_actual_number_export;
-        var MCFQ_list_exercise = new Array();
-        var MCFQ_actual_exercise;
-        //var A_popup;
-
-        //function that create an attempt without visualing it
-        $scope.MCQF_export_tryExercise = function (exercise) {
-            // create attempt from exercise
-            var exo_items;
-            //alert("exercise cree");
-
-            exo_items = Exercise.get({exerciseId : exercise.id});
-            //exo_items = Exercise.query({exerciseId : exercise.id});
-            //exo_items = Item.query({exerciseId : exercise.id},null );
-            //exo_items = Item.query({attemptId: 10},null );
-            exo_items = ItemByExercise.list({exerciseId : exercise.id});
-
-
-            //$scope.items = Item.query({attemptId: $stateParams.attemptId},
-            //retrieve those elements...
-            //alert(JSON.stringify(exo_items));
-        };
-
-        //function that return one exercise
-        $scope.MCFQ_export_1 = function(model, MCFQ_number_export)
-        {
-            var exercise;
-            MCFQ_list_exercise = new Array();
-            $scope.MCFQ_actual_number_export = 0;
-            console.log('export MCFQ exercise...');
-
-            //alert(">< : " + MCFQ_number_export);
-
-            //alert("actuel : " + $scope.MCFQ_actual_number_export + " max : "+ $scope.MCFQ_number_export);
-            //alert("actuel : " + element(by.model('MCFQ_actual_number_export')) + " max : "+ element(by.model('MCF_number_export')));
-            while($scope.MCFQ_actual_number_export<MCFQ_number_export)
-            {
-                // Repeat until exercise completion.
-                MCFQ_actual_exercise = ExerciseByModel.try({modelId: model.id},
-                function (exercise) {
-                    alert("id :"+MCFQ_actual_exercise.id + " :: idExo :" + exercise.id);
-                    $scope.MCQF_export_tryExercise(exercise);
-                });
-
-
-                // Si la génération s'est bien passée, on peut passer à la génération suivante
-                $scope.MCFQ_actual_number_export =  $scope.MCFQ_actual_number_export + 1;
-
-
-                // On oublie pas de stocker l'exercice
-                MCFQ_list_exercise.push(MCFQ_actual_exercise);
-
-            }
-        };
-
-        //function that generate exercise until MCFQ_number_export
-        // This function export an exercise without further verifications
-        $scope.exportExerciceFromModel = function ( model ){
-            // create exercise from model
-            console.log('export exercise...');
-
-            //A_popup = window.open("export.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
-            //A_popup = window.open("partial-model-edit.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
-            A_popup = window.open(BASE_CONFIG.urls.partials.teacher + "/partial-export-question.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
-            // TODO BRYAN : Ce n'est pas un chemin absolu qu'il me faut là
-            ///A_popup = window.open("C:/wamp/www/Claroline/web/bundles/simpleitclaireexercise/partials/teacher/partial-model-edit.html",
-            ///        "popup_id", "scrollbars,resizable,width=200,heigh=400,");
-
-            //alert("exportation");
-            //scope.go("");
-            //$location.path("/teacher/attempt/" + attempt.id);
-            //$state.go( exportEdit, {resourceId: model.modelID});
-            /*exercise = ExerciseByModel.try({modelId: modelId},
-             function (exercise) {
-             $scope.tryExercise(exercise);
-             });*/
-        };
-
     }])
 ;
 
@@ -1192,6 +1170,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
             });
         };
 
+
         $scope.createModel = function (type) {
             if (type == 'pair-items') {
                 Model.save($scope.modelContext.newModel.pair_items, function (data) {
@@ -1205,26 +1184,27 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                 Model.save($scope.modelContext.newModel.multiple_choice, function (data) {
                     $location.path('/teacher/model/' + data.id)
                 });
-            } else if (type == 'group-items') {
-                Model.save($scope.modelContext.newModel.group_items, function (data) {
+            } else if (type == 'annotated-text') {
+                Model.save($scope.modelContext.newModel.annotated_text, function (data) {
                     $location.path('/teacher/model/' + data.id)
                 });
+
+            } else if (type == 'group-items') {
+                    Model.save($scope.modelContext.newModel.group_items, function (data) {
+                        $location.path('/teacher/model/' + data.id)
+                    });
+
+
             } else if (type == 'open-ended-question') {
                 Model.save($scope.modelContext.newModel.open_ended_question, function (data) {
                     $location.path('/teacher/model/' + data.id)
                 });
             }
-            else if ( type == 'test-exercise'){ /** TODO HERE décommenter si cela n'est pas fait. */
-            Model.save($scope.modelContext.newModel.test_exercise, function (data) {
-                $location.path('/teacher/model/' + data.id)
-            });
-            }
-            else if ( type == 'multiple-choice-formula'){
-            Model.save($scope.modelContext.newModel.multiple_choice_formula, function (data) {
-                $location.path('/teacher/model/' + data.id)
-            });
-            }
         };
+
+
+
+
     }]);
 
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams',
@@ -1240,9 +1220,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 case 'multiple-choice':
                     $scope.acceptedTypes = ['multiple-choice-question'];
                     break;
-                case 'multiple-choice-formula':
-                     $scope.acceptedTypes = ['multiple-choice-formula-question'];
-                     break;
                 case 'open-ended-question':
                     $scope.acceptedTypes = ['open-ended-question'];
                     break;
@@ -1255,8 +1232,15 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 case 'group-items':
                     $scope.acceptedTypes = ['picture', 'text'];
                     break;
+                case 'annotated-text':
+                    $scope.acceptedTypes = ['annotated-text', 'text'];
+                    break;
             }
         });
+
+
+
+
 
         $scope.fillBlockConstraints = function (model) {
             switch (model.type) {
@@ -1270,9 +1254,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     $scope.fillConstraints(model.content.object_blocks);
                     break;
                 case 'multiple-choice':
-                    $scope.fillConstraints(model.content.question_blocks);
-                    break;
-                case 'multiple-choice-formula':
                     $scope.fillConstraints(model.content.question_blocks);
                     break;
                 case 'open-ended-question':
@@ -1298,6 +1279,55 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             }
         };
 
+
+        $scope.modelUpdateCheckbox = function(id,model)
+        {
+
+
+            if(id ==  1)
+            {
+                model.content.texteatrou = true;
+                model.content.parasite = false;
+                model.content.reecriture = false;
+                model.content.analyse = false;
+
+            }
+            else if(id == 2)
+            {
+                model.content.texteatrou = false;
+                model.content.parasite = true;
+                model.content.reecriture = false;
+                model.content.analyse = false;
+
+
+
+
+            }
+            else if(id ==  3)
+            {
+                model.content.texteatrou = false;
+                model.content.parasite = false;
+                model.content.reecriture = true;
+                model.content.analyse = false;
+
+
+
+            }
+            else if(id ==  4)
+            {
+                model.content.texteatrou = false;
+                model.content.parasite = false;
+                model.content.reecriture = false;
+                model.content.analyse = true;
+
+
+            }
+
+        }
+
+
+
+
         $scope.saveAndTry = function () {
             var newModel = $scope.preUpdate();
             newModel.$update({id: $stateParams.modelid}, function (model) {
@@ -1314,6 +1344,10 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.model.keywords.push(keyword[0].value);
                 keyword[0].value = '';
             }
+
+
+
+
 
             var key = $("#modelAddMetadataKey"), val = $("#modelAddMetadataValue");
             if (key[0].value != '' && val[0].value != '') {
@@ -1567,28 +1601,53 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope',
 
     }]);
 
-modelControllers.controller('modelEditTestExerciseController', ['$scope',
+
+modelControllers.controller('modelEditAnnotatedTextController', ['$scope',
     function ($scope) {
+
+
+
+
+
+
+
 
         $scope.modelAddBlockField = function (collection) {
             collection.splice(
                 collection.length,
                 0,
-                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_open_ended_question.block.block_field)
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_annotated_text.block_field)
             );
         }
 
+
+
+
+
+
+
+
+
+        $scope.getSelected =  function () {
+            if (window.getSelection) {
+                if(window.getSelection() !="") {
+                    document.getElementById('resourceAddPart').value = window.getSelection();
+                }
+            }
+            else if (document.getSelection) {
+                if(document.getSelection() !="") {
+                    document.getElementById('resourceAddPart').value = document.getSelection();
+                }
+            }
+            else {
+                var selection = document.selection && document.selection.createRange();
+                if (selection.text) {
+                    if(document.getSelection() !="") {
+                        document.getElementById('resourceAddPart').value = document.getSelection();
+                    }
+                }
+            }
+        }
     }]);
 
-modelControllers.controller('modelEditMultipleChoiceFormulaController', ['$scope',
-    function ($scope) {
-
-        $scope.modelAddBlockField = function (collection) {
-            collection.splice(
-                collection.length,
-                0,
-                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_multiple_choice_formula.block_field)
-            );
-        };
-    }]);
 

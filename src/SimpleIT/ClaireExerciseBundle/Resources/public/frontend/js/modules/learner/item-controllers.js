@@ -40,8 +40,8 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
                 $state.go('attempt.group-items', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'multiple-choice') {
                 $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
-            }else if ($scope.item.type == 'multiple-choice-formula') {
-                $state.go('attempt.multiple-choice-formula', {itemId: index}, {location: false});
+            } else if ($scope.item.type == 'annotated-text') {
+                $state.go('attempt.annotated-text', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'open-ended-question') {
                 $state.go('attempt.open-ended-question', {itemId: index}, {location: false});
             }
@@ -69,7 +69,6 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
                     $scope.tryExercise(exercise);
                 });
         };
-
 
     }]);
 
@@ -164,8 +163,6 @@ itemControllers.controller('orderItemsController', ['$scope', 'Answer', '$routeP
             for (i = 0; i < $scope.drops.length; ++i) {
                 answer.content.push($scope.drops[i].id);
             }
-
-            console.log(answer);
 
             answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
@@ -367,76 +364,6 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
         }
     }]);
 
-
-
-itemControllers.controller('multipleChoiceFormulaController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
-    function ($scope, Answer, $routeParams, $location, $stateParams) {
-
-        // post answer
-        $scope.saveAnswer = function () {
-            $scope.validable = false;
-
-            answer = new Answer;
-            answer.content = [];
-
-            for (i = 0; i < $scope.tick.length; ++i) {
-                if ($scope.tick[i]) {
-                    val = 1;
-                } else {
-                    val = 0;
-                }
-
-                answer.content.push(val);
-            }
-
-            item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
-                function (item) {
-                    $scope.items[$stateParams.itemId] = item;
-                    $scope.displayCorrection(item)
-                });
-        };
-
-        // correction
-        $scope.displayCorrection = function (item) {
-            for (var i = 0; i < $scope.tick.length; ++i) {
-                $scope.solution[i] = item['content'].propositions[i]['right'];
-            }
-            $scope.item.corrected = true;
-            $scope.item['content']['comment'] = item['content']['comment'];
-            $scope.item['content']['mark'] = item['content']['mark'];
-        };
-
-        // display learner answers
-        $scope.fillLearnerAnswers = function () {
-            for (var i = 0; i < $scope.tick.length; ++i) {
-                $scope.tick[i] = $scope.item['content'].propositions[i].ticked;
-            }
-        };
-
-        $scope.tickAction = function (index) {
-            if (!$scope.item.corrected) {
-                $scope.tick[index] = !$scope.tick[index];
-            }
-        };
-
-        // init answer array
-        $scope.tick = [];
-        $scope.solution = [];
-        console.log('reinit...');
-        for (i = 0; i < $scope.item['content'].propositions.length; ++i) {
-            $scope.tick[i] = false;
-            $scope.solution[i] = null;
-        }
-
-        if ($scope.item['corrected'] == true) {
-            $scope.fillLearnerAnswers();
-            $scope.displayCorrection($scope.item);
-        } else {
-            $scope.validable = true;
-        }
-    }]);
-
-
 itemControllers.controller('openEndedQuestionController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
     function ($scope, Answer, $routeParams, $location, $stateParams) {
 
@@ -474,48 +401,6 @@ itemControllers.controller('openEndedQuestionController', ['$scope', 'Answer', '
             $scope.validable = true;
         }
     }]);
-
-itemControllers.controller('testExerciseController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
-    function ($scope, Answer, $routeParams, $location, $stateParams) {
-
-        // post answer
-        $scope.saveAnswer = function () {
-            if ($scope.item['content'].answer != null && $scope.item['content'].answer != '') {
-                $scope.validable = false;
-
-                var answer = new Answer;
-                answer.content = {answer: $scope.item['content'].answer};
-
-                answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
-                    function (item) {
-                        $scope.items[$stateParams.itemId] = item;
-                        $scope.displayCorrection(item)
-                    });
-            }
-        };
-
-        // correction
-        $scope.displayCorrection = function (item) {
-            $scope.solutions = item['content'].solutions;
-            $scope.right = $scope.solutions.indexOf($scope.item['content'].answer) != -1;
-
-            $scope.item.corrected = true;
-            $scope.item['content']['comment'] = item['content']['comment'];
-            $scope.item['content']['mark'] = item['content']['mark'];
-        };
-
-        // init answer array
-        console.log('reinit...');
-        if ($scope.item['corrected'] == true) {
-            $scope.displayCorrection($scope.item);
-        } else {
-            $scope.validable = true;
-        }
-    }]);
-
-
-
-
 
 itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
     function ($scope, Answer, $routeParams, $location, $stateParams) {
@@ -624,3 +509,90 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
             $scope.displayCorrection($scope.item);
         }
     }]);
+
+
+itemControllers.controller('annotatedTextController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
+
+        $scope.answerInput = [];
+
+        $scope.saveAnswer = function () {
+            $scope.item.corrected = true;
+            var i = 0;
+            var result = new Array();
+            $(".rep").each(function () {
+                result[i] = $(this).val();
+                i++;
+            });
+            $scope.answerInput = result;
+        };
+
+        $scope.displayCorrection = function (texte, id, annotations) {
+            if (id != null) {
+
+                var i, j;
+                var textefinal = texte;
+                var bool = false;
+
+                for (i = 0; i < annotations.length; i++) {
+                    for (j = 0; j < $scope.answerInput.length; j++) {
+                        if (annotations[i] == $scope.answerInput[j]) {
+                            textefinal = textefinal.replace(annotations[i], '<span class="etiquette txt-etiquette good-answer etiquette-right">' + annotations[i] + '</span>');
+                            bool = true;
+                        }
+                    }
+                    if(!bool) {
+                       textefinal = textefinal.replace(annotations[i], '<span class="etiquette txt-etiquette wrong-answer etiquette-wrong">' + annotations[i] + '</span>');
+                    }
+                    bool = false;
+                }
+
+                document.getElementById("_"+id).innerHTML = textefinal;
+            }
+            $scope.answerInput;
+        }
+
+        $scope.holethetext = function (texte, id, trou) {
+            if($scope.item.corrected == false) {
+                if (id != null) {
+
+                    var i;
+                    var textefinal = texte;
+
+                    for (i = 0; i < trou.length; i++) {
+                        textefinal = textefinal.replace(trou[i], '<input type="text" class="rep" placeholder="réponse" ng-model="item.content.answer">');
+                    }
+
+                    document.getElementById(id).innerHTML = textefinal;
+                }
+            }
+        };
+
+        $scope.fillannotation = function (collection) {
+
+
+            var i;
+            var result = new Array();
+
+            result['part'] = new Array(collection.length);
+            result['type'] = new Array(collection.length);
+
+            for (i = 0; i < collection.length; i++) {
+                result['part'][i] = collection[i].part;
+                result['type'][i] = collection[i].type;
+            }
+
+            return result['part'];
+
+        };
+
+    }]);
+
+
+
+
+
+
+
+
+
